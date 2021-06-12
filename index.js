@@ -104,18 +104,12 @@ class SchemaObject {
    * @returns {SchemaObject}
    */
   min (value) {
-    if (this.data.type === 'array') {
-      return this._overrideDataAttribute('minItems', value)
+    const attributes = {
+      array: 'minItems',
+      string: 'minLength',
+      object: 'minProperties'
     }
-    if (this.data.type === 'string') {
-      return this._overrideDataAttribute('minLength', value)
-    }
-
-    if (this.data.type === 'object') {
-      return this._overrideDataAttribute('minProperties', value)
-    }
-
-    return this._overrideDataAttribute('minimum', value)
+    return this._overrideDataAttribute(attributes[this.data.type] || 'minimum', value)
   }
 
   /**
@@ -125,18 +119,12 @@ class SchemaObject {
    * @returns {SchemaObject}
    */
   max (value) {
-    if (this.data.type === 'array') {
-      return this._overrideDataAttribute('maxItems', value)
+    const attributes = {
+      array: 'maxItems',
+      string: 'maxLength',
+      object: 'maxProperties'
     }
-    if (this.data.type === 'string') {
-      return this._overrideDataAttribute('maxLength', value)
-    }
-
-    if (this.data.type === 'object') {
-      return this._overrideDataAttribute('maxProperties', value)
-    }
-
-    return this._overrideDataAttribute('maximum', value)
+    return this._overrideDataAttribute(attributes[this.data.type] || 'maximum', value)
   }
 
   /**
