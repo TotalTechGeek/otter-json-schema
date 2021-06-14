@@ -176,6 +176,34 @@ class SchemaObject {
   }
 
   /**
+   * Adds new properties to the object
+   * @param {*} properties
+   * @returns {SchemaObject}
+   */
+  extend (properties) {
+    const clone = this.clone()
+    clone.data.properties = { ...clone.data.properties, ...properties }
+    clone.data.required = []
+
+    Object.keys(clone.data.properties).forEach(property => {
+      if (clone.data.properties[property].meta && clone.data.properties[property].meta.required) {
+        clone.data.required = (clone.data.required || []).concat(property)
+      }
+
+      if (clone.data.properties[property] instanceof SchemaObject || clone.data.properties[property] instanceof SchemaJoin) {
+        const constructor = clone.data.properties[property] instanceof SchemaObject ? SchemaObject : SchemaJoin
+        clone.data.properties[property] = new constructor({ ...clone.data.properties[property], parent: this, propName: property, title: property })
+      } else if (clone.data.properties[property] instanceof Function && commonConversions.has(clone.data.properties[property])) {
+        const cloning = commonConversions.get(clone.data.properties[property])
+        const replacement = new SchemaObject({ ...cloning, title: property, propName: property, parent: this, meta: { ...cloning.meta, required: true } })
+        clone.data.properties[property] = replacement
+        clone.data.required = (clone.data.required || []).concat(property)
+      }
+    })
+    return clone
+  }
+
+  /**
    * Allows the specification of definitions
    * @param {*} x
    * @returns {SchemaObject}

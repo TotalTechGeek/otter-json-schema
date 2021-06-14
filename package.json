@@ -1,6 +1,6 @@
 {
   "name": "otter-json-schema",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A joi-like tool for generating json-schema",
   "main": "index.js",
   "author": "Jesse Daniel Mitchell",

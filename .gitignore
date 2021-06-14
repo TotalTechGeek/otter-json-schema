@@ -1,1 +1,5 @@
 node_modules/
+moreRandom.js
+bench.js
+randomTest.js
+.vscode/
